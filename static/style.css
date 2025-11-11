@@ -1,0 +1,311 @@
+/* =====================================
+   IoT Dashboard - Modern Style
+   ===================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeIn 0.5s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card h2 {
+    color: #667eea;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #667eea;
+    font-weight: 600;
+}
+
+.card p {
+    font-size: 1.1em;
+    margin: 15px 0;
+    padding: 12px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card p b {
+    color: #555;
+    font-weight: 600;
+}
+
+.card p span {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #667eea;
+    background: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* =====================================
+   RELAY CONTROL BUTTONS
+   ===================================== */
+button {
+    padding: 12px 30px !important;
+    margin: 10px 10px 20px 0 !important;
+    font-size: 1em;
+    font-weight: 600;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#relayOn {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+}
+
+#relayOn:hover {
+    background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4);
+}
+
+#relayOn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(17, 153, 142, 0.4);
+}
+
+#relayOff {
+    background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+    color: white;
+}
+
+#relayOff:hover {
+    background: linear-gradient(135deg, #f45c43 0%, #eb3349 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(235, 51, 73, 0.4);
+}
+
+#relayOff:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(235, 51, 73, 0.4);
+}
+
+#relayStatus {
+    color: #667eea;
+    font-size: 1.2em;
+    padding: 5px 15px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* =====================================
+   TABLE STYLING
+   ===================================== */
+#table-data {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+#table-data thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+#table-data th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1em;
+    letter-spacing: 0.5px;
+}
+
+#table-data tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+#table-data tbody tr:hover {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#table-data tbody tr:last-child {
+    border-bottom: none;
+}
+
+#table-data td {
+    padding: 12px 15px;
+    font-size: 0.95em;
+    color: #555;
+}
+
+#table-data tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+/* =====================================
+   CANVAS CHART STYLING
+   ===================================== */
+canvas {
+    max-width: 100%;
+    height: auto !important;
+    background: white;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* =====================================
+   RESPONSIVE DESIGN
+   ===================================== */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .card h2 {
+        font-size: 1.2em;
+    }
+
+    .card p {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .card p span {
+        align-self: flex-start;
+    }
+
+    button {
+        width: 100%;
+        margin: 5px 0 !important;
+    }
+
+    #table-data {
+        font-size: 0.85em;
+    }
+
+    #table-data th,
+    #table-data td {
+        padding: 8px 10px;
+    }
+}
+
+/* =====================================
+   LOADING ANIMATION
+   ===================================== */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* =====================================
+   BUTTON PULSE ANIMATION
+   ===================================== */
+@keyframes buttonPulse {
+    0% {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    50% {
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    }
+    100% {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+}
+
+button:focus {
+    outline: none;
+    animation: buttonPulse 1s ease-in-out;
+}
+
+/* =====================================
+   SCROLLBAR STYLING
+   ===================================== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}

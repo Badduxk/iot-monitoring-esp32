@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IoT Dashboard</title>
+    <script src="/static/chart.min.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <h1>IoT Monitoring Dashboard</h1>
+
+    <!-- ==============================
+        RELAY CONTROL
+    =============================== -->
+    <div class="card">
+        <h2>Relay Control</h2>
+
+        <button id="relayOn" onclick="setRelay('on')" style="padding:10px; margin-right:10px;">
+            Relay ON
+        </button>
+
+        <button id="relayOff" onclick="setRelay('off')" style="padding:10px;">
+            Relay OFF
+        </button>
+
+        <p>Status: <b id="relayStatus">Unknown</b></p>
+    </div>
+    <br>
+
+
+    <!-- ==============================
+        CARD STATISTIK SUHU
+    =============================== -->
+    <div class="card">
+        <h2>Temperature Statistics</h2>
+
+        <p><b>Maximum Temperature:</b> <span id="maxTemp">-</span> °C</p>
+        <p><b>Minimum Temperature:</b> <span id="minTemp">-</span> °C</p>
+        <p><b>Average Temperature:</b> <span id="avgTemp">-</span> °C</p>
+    </div>
+
+    <br>
+
+    <div class="card">
+        <h2>Realtime Sensor Data</h2>
+        <table id="table-data">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Temp</th>
+                    <th>Humidity</th>
+                    <th>Light</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <br>
+
+    <div class="card">
+        <h2>Temperature Chart</h2>
+        <canvas id="tempChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h2>Light Chart</h2>
+        <canvas id="lightChart"></canvas>
+    </div>
+
+    <script>
+        async function loadData() {
+            const req = await fetch("/api/data");
+            const data = await req.json();
+
+            // --- Update table ---
+            const tbody = document.querySelector("#table-data tbody");
+            tbody.innerHTML = "";
+
+            data.forEach(row => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${row.id}</td>
+                        <td>${row.temperature}</td>
+                        <td>${row.humidity}</td>
+                        <td>${row.light}</td>
+                        <td>${row.timestamp}</td>
+                    </tr>
+                `;
+            });
+
+            // --- Update charts ---
+            updateCharts(data);
+
+            // --- Update statistics ---
+            updateStats(data);
+        }
+
+        // ======================================
+        // CHART SETUP
+        // ======================================
+        var tempChart = new Chart(document.getElementById("tempChart"), {
+            type: "line",
+            data: { 
+                labels: [], 
+                datasets: [{ 
+                    label: "Temperature", 
+                    data: [], 
+                    borderWidth: 2 
+                }] 
+            },
+        });
+
+        var lightChart = new Chart(document.getElementById("lightChart"), {
+            type: "line",
+            data: { 
+                labels: [], 
+                datasets: [{ 
+                    label: "Light", 
+                    data: [], 
+                    borderWidth: 2 
+                }] 
+            },
+        });
+
+        function updateCharts(data) {
+            tempChart.data.labels = data.map(d => d.timestamp);
+            tempChart.data.datasets[0].data = data.map(d => d.temperature);
+            tempChart.update();
+
+            lightChart.data.labels = data.map(d => d.timestamp);
+            lightChart.data.datasets[0].data = data.map(d => d.light);
+            lightChart.update();
+        }
+
+        // ======================================
+        // STATISTIK SUHU
+        // ======================================
+        function updateStats(data) {
+            const temps = data.map(d => d.temperature);
+
+            const stats = calcStats(temps);
+
+            document.getElementById("maxTemp").innerText = stats.max;
+            document.getElementById("minTemp").innerText = stats.min;
+            document.getElementById("avgTemp").innerText = stats.avg;
+        }
+
+        // Hitung statistik sederhana
+        function calcStats(arr) {
+            return {
+                max: Math.max(...arr),
+                min: Math.min(...arr),
+                avg: (arr.reduce((a,b)=>a+b,0) / arr.length).toFixed(2)
+            };
+        }
+
+        // ======================================
+        // RELAY CONTROL FUNCTIONS
+        // ======================================
+        async function setRelay(cmd) {
+            await fetch("/led/" + cmd);
+            getRelayStatus();
+        }
+
+        async function getRelayStatus() {
+            const req = await fetch("/api/relay_status");
+            const data = await req.json();
+            document.getElementById("relayStatus").innerText = data.status.toUpperCase();
+        }
+
+        setInterval(getRelayStatus, 2000);
+        getRelayStatus();
+
+        // Interval untuk refresh data sensor
+        setInterval(loadData, 2000);
+        loadData();
+    </script>
+
+</body>
+</html>
